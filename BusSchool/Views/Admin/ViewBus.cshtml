@@ -1,0 +1,130 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using BusSchool.Models
+
+@model bus
+
+@{
+    ViewBag.Title = "View Bus";
+}
+
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2>View Bus</h2>
+    <h4>Bus</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-responsive table-striped">
+                <tr>
+                    <th><span class="fa fa-bus fa-fw"></span> Bus Number</th>
+                    <td>@Model.BusNumber</td>
+                </tr>
+                <tr>
+                    <th><span class="fa fa-shekel fa-fw"></span> Color</th>
+                    <td>@Model.Color</td>
+                </tr>
+                <tr>
+                    <th><span class="fa fa-user-circle-o fa-fw"></span> Driver Name</th>
+                    <td><a asp-controller="Admin" asp-action="ViewDriver" asp-route-id="@Model.Driver.Id">@Model.Driver.Name</a></td>
+                </tr>
+                <tr>
+                    <th><span class="fa fa-mobile-phone fa-fw"></span> Mobile</th>
+                    <td>@Model.Driver.PhoneNumber</td>
+                </tr>
+                <tr>
+                    <th><span class="fa fa-window-maximize fa-fw"></span> Maximum Seats</th>
+                    <td>@Model.MaximumSeats</td>
+                </tr>
+                <tr>
+                    <th><span class="fa fa-check-square-o fa-fw"></span> Booked Seats</th>
+                    <td>@Model.Seats.Count Booked</td>
+                </tr>
+                <tr>
+                    <th><span class="fa fa-square-o fa-fw"></span> Free Seats</th>
+                    <td>@(@Model.MaximumSeats - @Model.Seats.Count)</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4 col-md-offset-2">
+            <img src="~/image/buses/@Model.BusPicture" title="@Model.BusNumber" class="img-responsive img-thumbnail" height="300px" width="400px" />
+        </div>
+    </div>
+
+
+    <p>
+        <div class="btn-group">
+
+            <a class="btn btn-block btn-success" asp-controller="Admin" asp-action="Buses">Back to Buses List</a>
+            <a class="btn btn-block btn-info" asp-controller="Admin" asp-action="EditBus" asp-route-id="@Model.Id">Edit</a>
+            <a class="btn btn-block btn-danger" asp-controller="Admin" asp-action="DeleteBus" asp-route-id="@Model.Id">Delete</a>
+            
+        </div>
+    </p>
+</div>

@@ -1,0 +1,156 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using BusSchool.Models
+
+@model PassengerTicketView
+
+@{
+    ViewBag.Title = "View Ticket";
+}
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <h2>View Ticket</h2>
+        <h4>@Model.Passenger.ApplicationUser.UserName</h4>
+        <h5>@Model.Passenger.ApplicationUser.PhoneNumber</h5>
+        <h6>@Model.Passenger.ApplicationUser.Email</h6>
+
+        <hr />
+
+        <div class="col-md-5">
+            <table class="table table-responsive table-hover">
+                <tr>
+                    <td>ID</td>
+                    <td><a asp-controller="Admin" asp-action="ViewTrip" asp-route-id ="@Model.Ticket.Id">@Model.Ticket.Id</a></td>
+                </tr>
+                <tr>
+                    <td>Bus Number</td>
+                    <td><a asp-controller="Admin" asp-action="ViewTrip" asp-route-id="@Model.Ticket.Trip.Bus.Id">@Model.Ticket.Trip.Bus.BusNumber</a></td>
+                </tr>
+                <tr>
+                    <td>From</td>
+                    <td>@Model.Ticket.Trip.Line.From</td>
+                </tr>
+                <tr>
+                    <td>To</td>
+                    <td>@Model.Ticket.Trip.Line.To</td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td>$@Model.Ticket.Trip.Line.Price</td>
+                </tr>
+                <tr>
+                    <td>Payment</td>
+                    <td>@Model.Ticket.Payment.Method</td>
+                </tr>
+                <tr>
+                    <td>Blocked</td>
+                    <td>@Html.DisplayFor(c=> c.Ticket.IsBlocked)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-md-5 col-md-offset-1">
+            <div class="panel panel-info">
+                <div class="panel-heading">Ticket Seats</div>
+                <div class="panel-body">
+                    <table class="table table-responsive table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Seat Id</th>
+                                <th>Seat Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var Seat in Model.Seats)
+                            {
+                                <tr>
+                                    <td>@Seat.Id</td>
+                                    <td>@Seat.SeatNumber</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group">
+        @Html.ActionLink("Back to Tickets List", "Tickets", null, new { @class = "btn btn-success" })
+        @Html.ActionLink("Back to Passenger", "ViewPassenger", new { id = Model.Passenger.Id }, new { @class = "btn btn-info" })
+        @*@if (Model.Ticket.IsBlocked)
+        {
+        @Html.ActionLink("UnBlock Ticket", "BlockTicket", new { pid = Model.Passenger.Id, tid = Model.Ticket.Id }, new { @class = "btn btn-warning" })
+        }
+        else
+        {
+        @Html.ActionLink("Block Ticket", "BlockTicket", new { pid = Model.Passenger.Id, tid = Model.Ticket.Id }, new { @class = "btn btn-danger" })
+        }*@
+    </div>
+</div>

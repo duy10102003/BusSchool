@@ -1,0 +1,158 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using BusSchool.Models
+
+@model BusDriverView
+
+@{
+    ViewBag.Title = "Edit Bus";
+}
+
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+
+    <h2>Add Bus</h2>
+    <div class="col-md-6">
+        <form method="post" enctype="multipart/form-data" asp-controller="Admin" asp-action="EditBus">
+          
+            <input type="hidden" name="bid" asp-for="Bus.Id" />
+            <div class="form-horizontal">
+                <h4>Bus</h4>
+                <hr />
+               
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Bus.Color, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" name="busColor" asp-for="Bus.Color" />
+                        <span class="text-danger" asp-validation-for="@Model.Bus.Color"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Bus.BusNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" name="busNumber" asp-for="Bus.BusNumber" />
+                        <span class="text-danger" asp-validation-for="@Model.Bus.BusNumber"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Bus.MaximumSeats, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input class="form-control" type="text" name="maximumSeat" asp-for="Bus.MaximumSeats" />
+                        <span class="text-danger" asp-validation-for="@Model.Bus.MaximumSeats"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Bus.DriverId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="form-control" name="dId" asp-for="Bus.Driver">
+                            <option value="0">Select Driver</option>
+                            @foreach (Driver d in Model.Drivers)
+                            {
+
+                                <option value="@d.Id">@d.Name</option>
+                            }
+                        </select>
+                        <span class="text-danger" asp-validation-for="@Model.Bus.DriverId"></span>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Bus.BusPicture, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" name="BusPictureFile" asp-for="Bus.BusPicture" />
+                        <span class="text-danger" asp-validation-for="@Model.Bus.BusPicture"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-block btn-info" required />
+                        <div>
+                            <br />
+                            <a asp-controller="Admin" asp-action="Buses">Back to Buses List</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4 col-md-offset-2">
+        <br /><br /><br />
+        <img src="~/image//buses/@Model.Bus.BusPicture" title=" @Model.Bus.BusNumber " class="img-responsive img-thumbnail" />
+    </div>
+</div>
+
+
+

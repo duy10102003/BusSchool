@@ -1,0 +1,223 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using BusSchool.Models
+@model CheckCookie
+
+@{
+    ViewBag.Title = "Login";
+}
+
+
+<section>
+    @{
+        string name = "";
+        int checkRole = 0;
+    }
+
+    @{
+        string emailCookie = "";
+        string passCookie = "";
+    }
+
+    @if(ViewBag.EmailCookie!=null)
+    {
+        emailCookie = ViewBag.EmailCookie.Email;
+        passCookie = ViewBag.EmailCookie.Password;
+    }
+
+    @if (ViewBag.CurrentUser != null)
+    {
+        name = ViewBag.CurrentUser.UserName;
+        checkRole = ViewBag.CurrentUser.Role;
+    }
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Bus Reservation</a>
+                
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (ViewBag.CurrentUser != null || checkRole == 0)
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-controller="Home" asp-action="Index" #about">About</a></li>
+                        <li><a asp-controller="Home" asp-action="Index" #trips">Trips</a></li>
+                        <li><a asp-controller="Home" asp-action="Index" #buses">Buses</a></li>
+                        <li><a asp-controller="Home" asp-action="Index" #drivers">Drivers</a></li>
+                        <li><a asp-controller="Home" asp-action="Index" #contact">Contact</a></li>
+                    </ul>
+                }
+                else if (checkRole == 1)
+                {
+                    <ul class="nav navbar-nav">
+                        <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                        <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                        <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                        <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                        <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+                    </ul>
+                }
+
+                @if (ViewBag.CurrentUser != null)
+                {
+                    using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (ViewBag.CurrentUser.Role == 1)
+                            {
+                                <li><a asp-controller="Admin" asp-action="Index" >Dashboard</a></li>
+                                <li>
+                                    <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                                </li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                                <li>
+                                    <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                                </li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            }
+
+                        </ul>
+                    }
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                        <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                        <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    </ul>
+                }
+
+            </div>
+        </div>
+    </div>
+    <section class="vh-100">
+        <div class="container-fluid h-custom">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                    <img src="https://t4.ftcdn.net/jpg/03/19/48/09/360_F_319480933_XhNAPFu0ozP8MQ9DZR5PXyEpvUGff1T3.jpg"
+                         class="img-fluid" alt="Sample image">
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    <form method="post" asp-controller="Account" asp-action="Login">
+                        <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                            <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-facebook-f"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-primary btn-floating mx-1">
+                                <i class="fab fa-linkedin-in"></i>
+                            </button>
+                        </div>
+
+                        <div class="divider d-flex align-items-center my-4">
+                            <p class="text-center fw-bold mx-3 mb-0"></p>
+                        </div>
+
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <input class="form-control form-control-lg" id="form3Example3" name="email"
+                                   type="email" class="form-control" asp-for="CookieEmail" value="@emailCookie"   placeholder="Enter a valid email address" />
+                            <span class="text-danger" asp-validation-for="CookieEmail"></span>
+                            <label class="form-label" for="form3Example3">Email address</label>
+                        </div>
+
+                        <!-- Password input -->
+                        <div class="form-outline mb-3">
+                            <input id="form3Example4" class="form-control form-control-lg"
+                                   placeholder="Enter password"
+                                   name="pass" type="password" asp-for="CookiePass" value="@passCookie"  />
+                            <span class="text-danger" asp-validation-for="CookiePass"></span>
+                            <label class="form-label" for="form3Example4">Password</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Checkbox -->
+                            <div class="form-check mb-0">
+                                <input type="checkbox" name="checkRemember" asp-for="CookieRemember" checked />
+                                <label class="form-check-label" for="form2Example3">
+                                    Remember me
+                                </label>
+                            </div>
+                            <a asp-action="ForgotPassword" asp-controller="Account" class="text-body">Forgot password?</a>
+                        </div>
+
+                        <div class=" text-lg-start mt-4 pt-2">
+                            <button type="submit" class="btn btn-primary btn-lg"
+                                    style="padding-left: 2.5rem; padding-right: 2.5rem;">
+                                Login
+                            </button>
+                            <p class="small fw-bold mt-2 pt-1 mb-0">
+                                Don't have an account? <a asp-controller="Account" asp-action="Register"
+                                                          class="link-danger">Register</a>
+                            </p>
+                        </div>
+
+                    </form>
+                    @if (TempData["SignUp"] != null && !string.IsNullOrEmpty(TempData["SignUp"].ToString()))
+                    {
+                        <p class="alert alert-success" role="alert">@TempData["SignUp"]</p>
+                    }
+
+                    @if (!string.IsNullOrEmpty(ViewBag.Message))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @ViewBag.Message
+                        </div>
+                    }
+
+                    
+                      
+                    
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+            <!-- Copyright -->
+            <div class="text-white mb-3 mb-md-0">
+                Copyright © 2020. All rights reserved.
+            </div>
+            <!-- Copyright -->
+            <!-- Right -->
+            <div>
+                <a href="#!" class="text-white me-4">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#!" class="text-white me-4">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#!" class="text-white me-4">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a href="#!" class="text-white">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+            <!-- Right -->
+        </div>
+    </section>
+
+    
+   
+    @*<div>
+    <a asp-action="Index">Back to List</a>
+    </div>*@
+
+
+</section>

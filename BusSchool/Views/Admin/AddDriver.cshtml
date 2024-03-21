@@ -1,0 +1,149 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using BusSchool.Models
+
+@model Driver
+
+@{
+    ViewBag.Title = "Add Driver";
+}
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Add Driver</h2>
+
+   <form method="post" enctype="multipart/form-data" asp-controller="Admin" asp-action="AddDriver">
+       
+
+        <div class="form-horizontal">
+            <h4>Driver</h4>
+            <hr />
+            
+            <div class="form-group">
+                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" type="text" name="driverName" asp-for="Name" />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ssn, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" type="text" name="Ssn" asp-for="Ssn" />
+                    <span class="text-danger" asp-validation-for="Ssn"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.DriverLicence, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" type="text" name="driverLicence" asp-for="DriverLicence"/>
+                    <span class="text-danger" asp-validation-for="DriverLicence"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" type="text" name="phoneNumber" asp-for="PhoneNumber" />
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" type="text" name="emailAddress" asp-for="EmailAddress" />
+                    <span class="text-danger" asp-validation-for="EmailAddress"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ProfilePicture, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="file" name="ProfilePictureFile" asp-for="ProfilePicture" />
+                    <span class="text-danger" asp-validation-for="ProfilePicture"></span>
+                    
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-block btn-info" required />
+                    <div>
+                        <br />
+                        <a class="btn btn-success" asp-controller="Admin" asp-action="Drivers">Back to Drivers List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>

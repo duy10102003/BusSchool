@@ -1,0 +1,401 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using BusSchool.Models
+@model LinesBusesDriversView
+
+@{
+    ViewBag.Title = "Home Page";
+}
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Bus Reservation</a>
+
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Home" asp-action="Index" #about">About</a></li>
+                <li><a asp-controller="Home" asp-action="Index" #trips">Trips</a></li>
+                <li><a asp-controller="Home" asp-action="Index" #buses">Buses</a></li>
+                <li><a asp-controller="Home" asp-action="Index" #drivers">Drivers</a></li>
+                <li><a asp-controller="Home" asp-action="Index" #contact">Contact</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+
+<!-- Header -->
+
+
+<section id="aa-slider">
+    <div class="aa-slider-area">
+        <div id="sequence" class="seq">
+            <div class="seq-screen">
+
+                <!-- single slide item -->
+
+                <div class="seq-model">
+                    <img data-seq src="~/image/banner/banner_2.png" alt="Men slide img" />
+                </div>
+            </div>
+            <!-- slider navigation btn -->
+
+        </div>
+    </div>
+</section>
+
+
+<!-- Services Section -->
+<section id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">About Us</h2>
+                <h3 class="section-subheading text-muted">About Transpo Charter Bus Company</h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <img src="~/image/about/ico1.jpg" alt="Your Image" class="fa-stack-1x" style="width: 100%;">
+                </span>
+
+                <h4 class="service-heading">Team</h4>
+                <p class="text-muted">
+                    Purus porta feugiat egestas a diam sed ipsum, for In the bed to be drunk,
+                    the gravida aliquet faucibus is followed by the bed imperdiet vulputate scelerisque.
+                    The time was not put into bronze. The life of eleifend that land
+                </p>
+            </div>
+            <div class="col-md-4">
+
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <img src="~/image/about/ico2.jpg" alt="Your Image" class="fa-stack-1x" style="width: 100%;">
+                </span>
+
+                <h4 class="service-heading">Comfortable</h4>
+                <p class="text-muted">
+                    Now let the mountains be whole, the earth free, the pain of God.
+                    But let the kids be free. For he does not flatter the Bureau. How good is your smile?
+                    Children's career should be carried out. Let us live freely and with care, and let us be followed by laughter.
+
+                </p>
+            </div>
+            <div class="col-md-4">
+
+                <span class="fa-stack fa-4x">
+                    <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                    <img src="~/image/about/icon3.jpg" alt="Your Image" class="fa-stack-1x" style="width: 100%;">
+                </span>
+
+                <h4 class="service-heading">Safety</h4>
+                <p class="text-muted">
+                    For Safy, the school bus isn't just a mode of transportation—it's a stage for friendship, laughter, and endless possibilities.
+                    And as long as she's aboard, every ride is an adventure waiting to unfold.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Portfolio Grid Section -->
+<section id="trips" class="bg-light-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Trips</h2>
+                <h3 class="section-subheading text-muted">Nice Trip</h3>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var Trip in Model.Trips)
+            {
+                <div class="col-md-4 col-sm-6 portfolio-item">
+                    <a href="#Model-@Trip.Id" class="portfolio-link" data-toggle="modal">
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img src="~/image/trips/@Trip.TripPicture" class="img-responsive" alt="Line @Trip.Line.From To @Trip.Line.To Picture">
+                    </a>
+                    <div class="portfolio-caption">
+                        <h4>Line @Trip.Line.From To @Trip.Line.To</h4>
+                        <p class="text-muted">@Trip.Time</p>
+                    </div>
+                </div>
+
+                <!-- Portfolio Modals -->
+                <!-- Use the modals below to showcase details about your portfolio projects! -->
+                <!-- Portfolio Modal 1 -->
+                <div class="portfolio-modal modal fade" id="Model-@Trip.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="close-modal" data-dismiss="modal">
+                                <div class="lr">
+                                    <div class="rl">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-8 col-lg-offset-2">
+                                        <div class="modal-body">
+                                            <!-- Project Details Go Here -->
+                                            <h2>@Trip.ToString</h2>
+                                            <p class="item-intro text-muted">Nice Trip.</p>
+                                            <img class="img-responsive img-centered" src="~/image/trips/@Trip.TripPicture" alt="@Trip.Line.From To @Trip.Line.From Picture">
+                                            <p>School bus trips are an integral part of the educational experience for many students. 
+                                                However, ensuring the safety and proper behavior of students during these trips is of utmost importance. 
+                                                This article explores strategies for managing student
+                                                behavior and promoting safety on school bus journeys.</p>
+                                            @*<p>
+                                        <strong>Want these icons in this portfolio item sample?</strong>
+                                        </p>*@
+                                            <ul class="list-inline">
+                                                <li>Date: @Trip.Time</li>
+                                                <li>Line: @Trip.Line.From TO @Trip.Line.To</li>
+                                                <li>Price: $@Trip.Line.Price</li>
+                                            </ul>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</section>
+<!-- Buses Section -->
+<section id="buses">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Buses</h2>
+                <h3 class="section-subheading text-muted"></h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="timeline">
+
+                    @{
+                        var TimeLineStyleClass = "";
+                        var TimeLineInvertedStyleClass = "timeline-inverted";
+                        var CurrentStyle = TimeLineStyleClass;
+                        foreach (var Bus in Model.Buses)
+                        {
+                            <li class="@CurrentStyle">
+                                <div class="timeline-image">
+                                    <img class="img-circle img-responsive" src="~/image/buses/@Bus.BusPicture" alt="Bus Color is @Bus.Color">
+                                </div>
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h4>@Bus.BusNumber</h4>
+                                        <h4 class="subheading">@Bus.Driver.Name</h4>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <p class="text-muted">This Bus is Awesome one that number is @Bus.BusNumber , The Driver Who will be our Transportation Hero is @Bus.Driver.Name, You will take all Information about him in your Ticket.</p>
+                                    </div>
+                                </div>
+                            </li>
+
+                            if (CurrentStyle == TimeLineStyleClass)
+                            {
+                                CurrentStyle = TimeLineInvertedStyleClass;
+                            }
+                            else
+                            {
+                                CurrentStyle = TimeLineStyleClass;
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section id="drivers" class="bg-light-gray">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Our Amazing Drivers</h2>
+                <h3 class="section-subheading text-muted">
+                    Our drivers undergo rigorous training and certification processes
+                    to guarantee the highest standards of safety and professionalism. Each driver is extensively vetted,
+                    possessing not only the necessary
+                    licenses and qualifications but also the compassion and patience required to care for the precious cargo they transport.
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var Driver in Model.Drivers)
+            {
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="~/image/drivers/@Driver.ProfilePicture" class="img-responsive img-circle" alt="@Driver.Name Picture">
+                        <h4>@Driver.Name</h4>
+                        <p class="text-muted">@Driver.EmailAddress</p>
+                        <ul class="list-inline social-buttons">
+                            <li>
+                                <a href="#"><span class="fab fa-facebook"></span></a>
+                            </li>
+                            <li>
+                                <a href="#"><span class="fab fa-instagram"></span></a>
+                            </li>
+                            <li>
+                                <a href="#"><span class="fab fa-linkedin"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <p class="large text-muted">
+                    Above all, our drivers are committed to fostering positive relationships with students
+                    and parents. They greet each student with a warm smile, offering reassurance and encouragement,
+                    and they prioritize open communication with parents to address any concerns or special requirements..
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Clients Aside -->
+<aside class="clients">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <a href="#">
+                    <img src="~/css/Template/img/logos/aetuts.jpg" class="img-responsive img-centered" alt="">
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <a href="#">
+                    <img src="~/css/Template/img/logos/designmodo.jpg" class="img-responsive img-centered" alt="">
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <a href="#">
+                    <img src="~/css/Template/img/logos/themeforest.jpg" class="img-responsive img-centered" alt="">
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <a href="#">
+                    <img src="~/css/Template/img/logos/creative-market.jpg" class="img-responsive img-centered" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>
+<!-- Contact Section -->
+<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Contact Us</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+                <form asp-controller="Home" asp-action="Contact">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input tpye="text" placeholder="Your Name *" class="form-control" name="ContactName" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="form-group">
+                                <input tpye="text" placeholder="Your Email Address *" class="form-control" name="ContactEmail" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="form-group">
+                                <input tpye="text" placeholder="Your Phone Number *" class="form-control" name="ContactPhone" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <textarea id="content" name="ContactMessage" rows="5" cols="25"></textarea>
+                                
+                                <p class="help-block text-danger"></p>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-lg-12 text-center">
+                            <div id="success"></div>
+                            <button type="submit" class="btn btn-xl">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+

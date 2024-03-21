@@ -1,0 +1,161 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using BusSchool.Models
+@model User
+@{
+    ViewBag.Title = "Register";
+}
+<section>
+    @{
+        string name = "";
+    }
+
+    @if (ViewBag.CurrentUser != null)
+    {
+        name = ViewBag.CurrentUser.UserName;
+    }
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Bus Reservation</a>
+
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a asp-controller="Home" asp-action="Index" #about">About</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" #trips">Trips</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" #buses">Buses</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" #drivers">Drivers</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" #contact">Contact</a></li>
+                </ul>
+
+                @if (ViewBag.CurrentUser != null)
+                {
+                    using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (ViewBag.CurrentUser.Role == 1)
+                            {
+                                <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                                <li>
+                                    <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                                </li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                                <li>
+                                    <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                                </li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                            }
+
+                        </ul>
+                    }
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                        <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                        <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                    </ul>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+
+
+    <section id="aa-slider">
+        <div class="aa-slider-area">
+            <div id="sequence" class="seq">
+                <div class="seq-screen">
+
+                    <!-- single slide item -->
+
+                    <div class="seq-model">
+                        <img width="1900px" height="400px" data-seq src="~/image/banner/banner_2.png" alt="Men slide img" />
+                    </div>
+                </div>
+                <!-- slider navigation btn -->
+
+            </div>
+        </div>
+    </section>
+
+</section>
+
+<h1>Sign Up</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data">
+
+            <div class="form-outline mb-4">
+                <input type="text" id="email" class="form-control form-control-lg" asp-for="Email" />
+                <label class="form-label" for="email">Email</label>
+            </div>
+
+            <div class="form-outline mb-4">
+                <input type="text" id="username" class="form-control form-control-lg" asp-for="UserName" />
+                <label class="form-label" for="username">UserName</label>
+            </div>
+
+            <div class="form-outline mb-4">
+                <input type="password" id="password" class="form-control form-control-lg" asp-for="Password" />
+                <label class="form-label" for="password">Password</label>
+            </div>
+
+            <div class="form-outline mb-4">
+                <input type="password" id="repassword" class="form-control form-control-lg" name="confirm" />
+                <label class="form-label" for="repassword">Re-enter Password</label>
+            </div>
+
+
+            <div class="form-outline mb-4">
+                <input type="text" id="phone"  class="form-control form-control-lg" asp-for="Ssn" />
+                <label class="form-label" for="phone">Ssn</label>
+            </div>
+
+            <div class="form-outline mb-4">
+                <input type="text" id="address"  class="form-control form-control-lg" asp-for="PhoneNumber" />
+                <label class="form-label" for="address">Phone Number</label>
+            </div>
+            <div class="form-outline mb-4">
+                <input type="file" id="image" class="form-control form-control-lg" name="profilepicture" asp-for="ProfilePicture" value="avartar_default.jpg" />
+                <label class="form-label" for="address">Profile Picture</label>
+            </div>
+            <span style="color: red"> @Html.ValidationSummary() </span>
+            <input type="hidden" id="role" name="id" value="0" asp-for="Role" />
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
+                    Register
+                </button>
+            </div>
+
+            <p class="text-center text-muted mt-5 mb-0">
+                Have already an account? <a asp-controller="Account" asp-action="Login" class="fw-bold text-body"><u>Login here</u></a>
+            </p>
+
+        </form>
+    </div>
+    @if (!string.IsNullOrEmpty(ViewBag.Error))
+    {
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.Error
+        </div>
+    }
+
+</div>
+

@@ -1,0 +1,119 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using BusSchool.Models
+
+@model List<Feedback>
+@{
+    ViewBag.Title = "Feedbacks";
+}
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <h2>Feedbacks</h2>
+    <a asp-controller="Admin" asp-action="Index" class="btn btn-default pull-right">
+        <span class="fa fa-dashboard fa-fw  text-info"></span> Dashboard
+    </a>
+    <p>Whole Feedbacks on System - Statistics Overview</p>
+
+    <div class="row">
+        <div class="col-md-12">
+            <br /><br />
+            <table class="table table-hover table-responsive" id="feedbacks">
+                <thead>
+                    <tr>
+                        <th><span class="fa fa-id-badge"></span> Feedback ID</th>
+                        <th><span class="fa fa-user-o"></span> Passenger</th>
+                        <th><span class="fa fa-bars"></span> Line</th>
+                        <th><span class="fa fa-envelope-o"></span> Feedback Message</th>
+                        <th><span class="fa fa-calendar"></span> Time</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Feedback in Model)
+                    {
+                        <tr>
+                            <td>@Feedback.Id</td>
+                            <td><a asp-controller="Admin" asp-action="ViewPassenger" asp-route-id ="@Feedback.PassengerId.Id">@Feedback.PassengerId.ApplicationUser.UserName </a></td>
+                            <td><a asp-controller="Admin" asp-action="ViewLine" asp-route-id="@Feedback.TripId.Id">From @Feedback.TripId.Line.From To @Feedback.TripId.Line.To</a></td>
+                            <td>@Feedback.FeedbackMessage</td>
+                            <td>@Feedback.Timestamp</td>
+                            <td>
+                                <a asp-controller="Admin" asp-action="ViewFeedback" asp-route-id="@Feedback.Id" class="btn btn-info">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+

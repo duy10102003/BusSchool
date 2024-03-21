@@ -1,0 +1,147 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using BusSchool.Models
+
+@model Feedback
+
+@{
+    ViewBag.Title = "Feedback";
+}
+
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <br /><br />
+    <h2>Feedback</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-responsive table-condensed">
+                <tr>
+                    <td>Trip Number</td>
+                    <td>@Model.TripId.Id</td>
+                </tr>
+                <tr>
+                    <td>Trip Line</td>
+                    <td>@Model.TripId.ToString</td>
+                </tr>
+                <tr>
+                    <td>Bus Number</td>
+                    <td>@Model.TripId.Bus.BusNumber</td>
+                </tr>
+                <tr>
+                    <td>Driver Name</td>
+                    <td>@Model.TripId.Bus.Driver.Name</td>
+                </tr>
+            </table>
+            <div>
+                <a class="btn btn-block btn-info" asp-controller="Passengers" asp-action="Index">Back to Profile</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-1">
+            <form asp-controller="Passengers" asp-action="Feedback" method="post">
+            
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <input type="hidden" asp-for="PassengerId.Id" />
+                    <input type="hidden" asp-for="TripId.Id" />
+                    <label>Mark: </label>
+                    <input type="number" min="0" max="10" name="mark" asp-for="Mark"   />
+                    
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10 ">
+                                    @Html.TextAreaFor(model => model.FeedbackMessage, new { @class = "form-control", row = 3, placeholder = "Please Write Your Feedback Here." })
+                                    @*<textarea form="FeedbackMessage" class="form-control" rows="3" placeholder="Please Write Your Feedback Here."></textarea>*@
+                                    @Html.ValidationMessageFor(model => model.FeedbackMessage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-1 col-md-10">
+                                    <input type="submit" value="Submit" class="btn btn-success btn-block" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+

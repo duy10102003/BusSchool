@@ -1,0 +1,144 @@
+﻿@using System.Web
+@using ProjectPrn
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+          integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- icon -->
+
+    <link rel="stylesheet" href="~/css/bootstrap.css"/>
+    <link rel="stylesheet" href="~/css/font-awesome.css"/>
+    <link href="~/css/toastr.css" rel="stylesheet"/>
+    <link href="~/css/DataTables/css/dataTables.bootstrap.css" rel="stylesheet"/>
+    <link href="~/css/Template/css/agency.css rel="stylesheet"/>
+    <link rel="stylesheet" href="~/css/Site.css" />
+
+
+    <script src="~/js/modernizr-2.6.2.js"></script>
+
+
+</head>
+<body>
+   
+
+    @RenderBody()
+
+
+
+    <footer id="aa-footer">
+
+        <!-- footer bottom -->
+        <div class="aa-footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="aa-footer-top-area">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="aa-footer-widget">
+                                        <a href="${pageContext.request.contextPath}/"><img src="~/assets/images/logo_footer.png" alt="logo img" width="185px"></a>
+                                        <ul class="aa-footer-nav">
+
+                                            <li>
+                                                <p style="color:#888; text-align: justify; width: 95%">
+                                                    Là nơi chuyên buôn bán tất cả các mặt hàng về nông sản chất lượng.
+                                                    Chúng tôi luôn đặt tiêu chí về chất lượng và uy tín lên hàng đầu.
+                                                </p>
+                                            </li>
+                                            <li><img src="/assets/images/dadangky.png" alt="logo img" width="40%"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="aa-footer-widget">
+                                        <div class="aa-footer-widget">
+                                            <h3>HỖ TRỢ KHÁCH HÀNG</h3>
+                                            <ul class="aa-footer-nav">
+                                                <li><a href="${pageContext.request.contextPath}/view/client/order">Hướng dẫn đặt hàng</a></li>
+                                                <li><a href="${pageContext.request.contextPath}/view/client/payment">Hướng dẫn thanh toán</a></li>
+                                                <li><a href="${pageContext.request.contextPath}/view/client/security">Chính sách bảo mật thông tin</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="aa-footer-widget">
+                                        <div class="aa-footer-widget">
+                                            <h3>LIÊN HỆ</h3>
+                                            <address>
+                                                <p>Hòa Lạc - H.Thạch Thất -  TP Hà Nội</p>
+                                                <p><span class="fa fa-phone"></span>058.4674.398</p>
+                                                <p><span class="fa fa-envelope"></span>DuyLCHE176566@fpt.edu.vn</p>
+                                            </address>
+                                            <div class="aa-footer-social">
+                                                <a href="https://www.facebook.com/profile.php?id=100011716313008"><span class="fab fa-facebook"></span></a>
+                                                <a href="https://www.youtube.com/channel/UCtGD4EmzodanlCNYTEz_Low"><span class="fab fa-youtube"></span></a>
+                                                <a href="https://www.instagram.com/duy101003/"><span class="fab fa-instagram"></span></a>
+                                                <!-- <a href="#"><span class="fab fa-skype"></span></a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer-bottom -->
+        <div class="aa-footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="aa-footer-bottom-area">
+                           <p>&copy; @DateTime.Now.Year - Online Bus Reservation. </p>
+                            <div class="aa-footer-payment">
+                                <span class="fab fa-cc-mastercard"></span>
+                                <span class="fab fa-cc-visa"></span>
+                                <span class="fab fa-paypal"></span>
+                                <span class="fab fa-cc-discover"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- / footer -->
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script src="~/js/jquery-1.10.2.intellisense.js"></script>
+    <script src="~/js/jquery-1.10.2.js"></script>
+    <script src="~/js/jquery-1.10.2.min.js"></script>
+
+    <script src="~/js/bootbox.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+    <script src="~/js/respond.js"></script>
+    <script src="~/js/toastr.js"></script>
+    <script src="~/js/DataTables/jquery.dataTables.js"></script>
+    <script src="~/js/DataTables/dataTables.bootstrap.js"></script>
+
+
+
+    <script src="~/js/Template/js/jquery.easing.min.js"></script>
+
+    <script src="~/js/Template/js/jqBootstrapValidation.js"></script>
+    <script src="~/js/Template/js/contact_me.js"></script>
+    <script src="~/js/Template/js/agency.js"></script>
+    <script src="~/js/index.js"></script>
+
+</body>
+</html>
+

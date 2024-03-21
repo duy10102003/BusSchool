@@ -1,0 +1,4 @@
+﻿A01|Nguyen Van A|500|50
+A02|Nguyen Van B|700|100
+A07|Nguyen Van C|700|100
+A03|Nguyen Van D|700|100

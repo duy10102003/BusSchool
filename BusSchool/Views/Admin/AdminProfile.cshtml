@@ -1,0 +1,113 @@
+﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using BusSchool.Models
+@model User
+
+@{
+    ViewBag.Title = "AdminProfile";
+}
+
+@{
+    string name = "";
+}
+
+@if (ViewBag.CurrentUser != null)
+{
+    name = ViewBag.CurrentUser.UserName;
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a asp-controller="Admin" asp-action="Index">DashBoard</a></li>
+                <li><a asp-controller="Admin" asp-action="Trips">Trips</a></li>
+                <li><a asp-controller="Admin" asp-action="Buses">Buses</a></li>
+                <li><a asp-controller="Admin" asp-action="Drivers">Drivers</a></li>
+                <li><a asp-controller="Admin" asp-action="Lines">Lines</a></li>
+            </ul>
+
+            @if (ViewBag.CurrentUser != null)
+            {
+                using (Html.BeginForm("LogOut", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (ViewBag.CurrentUser.Role == 1)
+                        {
+                            <li><a asp-controller="Admin" asp-action="Index">Dashboard</a></li>
+                            <li>
+                                <a asp-controller="Admin" asp-action="AdminProfile">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                            <li>
+                                <a asp-controller="Passengers" asp-action="Index">Hello @name</a>
+                            </li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                        }
+
+                    </ul>
+                }
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-controller="Passengers" asp-action="Booking">Booking</a></li>
+                    <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Information</h2>
+            <table class="table table-responsive table-condensed">
+                @*<tr>
+                <td>Name</td>
+                <td>@Model.UserName</td>
+                </tr>*@
+                <tr>
+                    <td>Email</td>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <td>SSN</td>
+                    <td>@Model.Ssn</td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td>@Model.PhoneNumber</td>
+                </tr>
+            </table>
+
+            <div>
+                <br /><br />
+                <a asp-controller="Admin" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-block btn-info">Dashboard</a>
+                <a asp-controller="Manage" asp-action="AddPhoneNumber" asp-route-id="@Model.Id" class="btn btn-block btn-warning">Change My Phone Numebr</a>
+                <a asp-controller="Manage" asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn btn-block btn-success">Change My Password</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-md-offset-1">
+            <br /><br />
+            <img src="~/image/picture_user/@Model.ProfilePicture" class="img-responsive img-thumbnail" title="@Model.UserName Profile Picture" />
+        </div>
+    </div>
+</div>
